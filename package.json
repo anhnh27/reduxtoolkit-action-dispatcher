@@ -1,11 +1,27 @@
 {
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/esm/index.d.ts",
+  "name": "@anhnh27/reduxtoolkit-action-dispatcher",
+  "version": "1.0.0",
+  "author": "Hoang Anh Nguyen <nguyenhoanganh10290@gmail.com>",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhnh27/reduxtoolkit-action-dispatcher.git"
+  },
+  "homepage": "https://github.com/anhnh27/reduxtoolkit-action-dispatcher",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "redux",
+    "redux-toolkit",
+    "redus-saga",
+    "dispatch"
+  ],
   "scripts": {
-    "build": "yarn build:esm && yarn build:cjs",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module commonjs --outDir lib/cjs"
+    "build": "tsc",
+    "publish": ""
   },
   "devDependencies": {
     "typescript": "^4.8.4"

@@ -1,5 +1,5 @@
+import actionDispatcherMiddleware from '@anhnh27/reduxtoolkit-action-dispatcher';
 import {configureStore} from '@reduxjs/toolkit';
-import actionDispatcherMiddleware from './actionDispatcherMiddleware';
 import counterReducer from './counterSlice';
 
 export const store = configureStore({

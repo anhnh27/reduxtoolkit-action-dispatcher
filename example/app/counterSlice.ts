@@ -1,8 +1,8 @@
+import {createDispatcher} from '@anhnh27/reduxtoolkit-action-dispatcher';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import {createSlice} from '@reduxjs/toolkit';
-import createDispatcher from './createDispatcher';
 
-export interface CounterState {
+interface CounterState {
   value: number;
   form: {
     text: string;
