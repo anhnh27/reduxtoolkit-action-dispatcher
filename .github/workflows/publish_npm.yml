@@ -2,7 +2,7 @@ name: "🚀 Publish module to NPM"
 on:
   push:
     branches:
-      - master
+      - "master"
 
 jobs:
   publish:
