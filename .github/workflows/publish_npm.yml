@@ -1,0 +1,21 @@
+name: "🚀 Publish module to NPM"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    name: "🚀 release"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.5.0
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: "16"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: yarn
+      - run: yarn build
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
