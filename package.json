@@ -1,6 +1,6 @@
 {
   "name": "@anhnh27/reduxtoolkit-action-dispatcher",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "author": "Hoang Anh Nguyen <nguyenhoanganh10290@gmail.com>",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,21 +13,28 @@
   "files": [
     "dist"
   ],
+  "description": "Dispatch redux actions without useDispatch or mapDispatchToProps",
   "keywords": [
     "redux",
     "redux-toolkit",
-    "redus-saga",
-    "dispatch"
+    "redux-saga",
+    "dispatch",
+    "redux-saga",
+    "actions",
+    "dispatcher",
+    "useDispatch"
   ],
   "scripts": {
     "build": "tsc",
     "publish": ""
   },
   "peerDependencies": {
-    "@reduxjs/toolkit": "^1.9.0"
+    "@reduxjs/toolkit": "^1.9.0",
+    "redux-saga": "^1.2.1"
   },
   "devDependencies": {
     "typescript": "^4.8.4",
-    "@reduxjs/toolkit": "^1.9.0"
+    "@reduxjs/toolkit": "^1.9.0",
+    "redux-saga": "^1.2.1"
   }
 }

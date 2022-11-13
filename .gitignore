@@ -63,3 +63,11 @@ typings/
 .next
 
 dist
+
+example/node_modules
+example/ios/Pods
+example/ios/build
+*.xcwworkspace
+
+.DS_Store
+example/.DS_Store

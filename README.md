@@ -1,6 +1,6 @@
 # reduxtoolkit-action-dispatcher
 
-Dispatch actions without importing dispatch.
+Dispatch redux actions without useDispatch or mapDispatchToProps.
 
 ## Install
 
@@ -8,16 +8,16 @@ Dispatch actions without importing dispatch.
 yarn add "@anhnh27/reduxtoolkit-action-dispatcher"
 ```
 
-
 ### Setup
+
 ```js
-import actionDispatcherMiddleware from '@anhnh27/reduxtoolkit-action-dispatcher';
-import {configureStore} from '@reduxjs/toolkit';
-import counterReducer from './counterSlice';
+import actionDispatcherMiddleware from "@anhnh27/reduxtoolkit-action-dispatcher";
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./counterSlice";
 
 export const store = configureStore({
   reducer: counterReducer,
-  middleware: curryGetDefaultMiddleware =>
+  middleware: (curryGetDefaultMiddleware) =>
     curryGetDefaultMiddleware().concat(actionDispatcherMiddleware),
 });
 
@@ -26,7 +26,9 @@ export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 ```
+
 ### Usage
+
 ```js
 
 //counterSlice.ts
@@ -87,3 +89,6 @@ const TestDispatcher = () => {
 export default TestDispatcher;
 ```
 
+### TODO:
+
+- manage peerDependency automatically

@@ -3,33 +3,62 @@
  * Date: 08 Nov 22
  */
 
-import { CaseReducerActions, Slice, SliceCaseReducers } from "@reduxjs/toolkit";
-import { store } from "./actionDispatcherMiddleware";
+import {CaseReducerActions, Slice, SliceCaseReducers} from '@reduxjs/toolkit';
+import {store} from './actionDispatcherMiddleware';
+import Concurrency from './Concurrency';
+import {injectResultToAction} from './utils';
 
-const createDispatcher = <State, CaseReducers extends SliceCaseReducers<State>>(
-  slice: Slice<State, CaseReducers, string>
-) => {
-  const actions: CaseReducerActions<CaseReducers, string> = slice.actions;
-  type Dispatcher = typeof actions;
-  let dispatcher = {} as Dispatcher;
+type DispatchFunction = (...args: any[]) => any;
+
+type PromiseResult = {
+  $result: any;
+};
+
+export type ActionWithPromise<D extends DispatchFunction> = (
+  ...args: Parameters<D>
+) => ReturnType<D> & PromiseResult;
+
+const createDispatcher = <
+  State,
+  CaseReducers extends SliceCaseReducers<State>,
+  Name extends string,
+>(
+  slice: Slice<State, CaseReducers, Name>,
+): {
+  [Type in keyof CaseReducers]: CaseReducers[Type] & ActionWithPromise<any>;
+} => {
+  const dispatcher = {};
+  const actions: CaseReducerActions<CaseReducers, Name> = slice.actions;
   for (const action in actions) {
     if (Object.prototype.hasOwnProperty.call(actions, action)) {
       Object.defineProperty(dispatcher, action, {
-        value: wrapDispatch(actions[action]),
-        writable: false,
-        enumerable: true,
-        configurable: true,
+        value: wrapDispatch(`${slice.name}/${action}`, actions[action]),
       });
     }
   }
-  return dispatcher;
+
+  return dispatcher as unknown as {
+    [Type in keyof CaseReducers]: CaseReducers[Type] & ActionWithPromise<any>;
+  };
 };
 
-const wrapDispatch = (creator: any) => {
+const wrapDispatch = (type: string, creator: any) => {
   const dispatcher = (...args: any[]) => {
-    const action = creator.apply(null, args);
-    return store.dispatch(action);
+    const payload = creator.apply(null, args);
+
+    let action = injectResultToAction({
+      type: payload.type,
+      ...payload,
+    });
+
+    action = Concurrency.injectResult(action);
+    store.dispatch(action);
+    return action;
   };
+
+  dispatcher.toString = () => type;
+  dispatcher.type = type;
+
   return dispatcher;
 };
 
