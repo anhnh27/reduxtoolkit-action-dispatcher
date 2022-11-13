@@ -3,7 +3,7 @@
  * Date: 08 Nov 22
  */
 
-import { AnyAction, Dispatch } from "./types";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
   dispatch: D;

@@ -3,8 +3,8 @@
  * Date: 08 Nov 22
  */
 
+import { CaseReducerActions, Slice, SliceCaseReducers } from "@reduxjs/toolkit";
 import { store } from "./actionDispatcherMiddleware";
-import { CaseReducerActions, Slice, SliceCaseReducers } from "./types";
 
 const createDispatcher = <State, CaseReducers extends SliceCaseReducers<State>>(
   slice: Slice<State, CaseReducers, string>
