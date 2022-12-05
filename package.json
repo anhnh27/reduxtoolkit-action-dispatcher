@@ -1,6 +1,6 @@
 {
   "name": "@anhnh27/reduxtoolkit-action-dispatcher",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Hoang Anh Nguyen <nguyenhoanganh10290@gmail.com>",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

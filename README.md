@@ -30,58 +30,78 @@ export type AppDispatch = typeof store.dispatch;
 ### Usage
 
 ```js
-
 //counterSlice.ts
-import {createDispatcher} from '@anhnh27/reduxtoolkit-action-dispatcher';
-import type {PayloadAction} from '@reduxjs/toolkit';
-import {createSlice} from '@reduxjs/toolkit';
+import { createDispatcher } from "@anhnh27/reduxtoolkit-action-dispatcher";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface CounterState {
   value: number;
-  form: {
-    text: string;
-  };
 }
 
 const initialState: CounterState = {
   value: 0,
-  form: {
-    text: '',
-  },
 };
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState,
   reducers: {
-    increment: state => {
-      state.value += 1;
-    },
-    decrement: state => {
-      state.value -= 1;
-    },
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
-    saveForm: (state, action: PayloadAction<{text: string}>) => {
-      state.form = action.payload;
+    update: (state, action: PayloadAction<{ text: string }>) => state,
+  },
+});
+
+export const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
     },
+    update: (state, _action: PayloadAction<string>) => state,
   },
 });
 
 export const counterDispatcher = createDispatcher(counterSlice);
 
-export default counterSlice.reducer;
+const fakeApiRequest = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 3000);
+  });
+};
+
+function* counterSagaWorker({ $result }: any) {
+  console.log("counterSagaWorker called");
+  yield call(fakeApiRequest);
+  $result.value = true;
+}
 
 //Test.tsx
-import {useEffect} from 'react';
-import {counterDispatcher} from './counterSlice';
+import { useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
+import { counterDispatcher } from "./counterSlice";
 
 const TestDispatcher = () => {
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    counterDispatcher.saveForm({text: 'Sir Alex'});
+    (async () => {
+      await counterDispatcher.update("Hello wolrd").$result;
+      setLoading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
     counterDispatcher.incrementByAmount(10);
   }, []);
+
+  if (loading) {
+    return <ActivityIndicator size={"large"} />;
+  }
 
   return null;
 };
@@ -90,5 +110,3 @@ export default TestDispatcher;
 ```
 
 ### TODO:
-
-- manage peerDependency automatically
