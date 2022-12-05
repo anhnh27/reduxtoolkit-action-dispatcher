@@ -1,6 +1,7 @@
 # reduxtoolkit-action-dispatcher
 
-Dispatch redux actions without useDispatch or mapDispatchToProps.
+- Dispatch redux actions without useDispatch or mapDispatchToProps.
+- Wait for your action.
 
 ## Install
 
@@ -50,7 +51,7 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
-    update: (state, action: PayloadAction<{ text: string }>) => state,
+    update: (state, action: PayloadAction<string>) => state,
   },
 });
 
@@ -61,7 +62,7 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
-    update: (state, _action: PayloadAction<string>) => state,
+    update: (state, action: PayloadAction<string>) => state,
   },
 });
 
@@ -75,8 +76,7 @@ const fakeApiRequest = () => {
   });
 };
 
-function* counterSagaWorker({ $result }: any) {
-  console.log("counterSagaWorker called");
+function* counterSagaWorker({ $result }: AnyAction) {
   yield call(fakeApiRequest);
   $result.value = true;
 }
@@ -108,5 +108,3 @@ const TestDispatcher = () => {
 
 export default TestDispatcher;
 ```
-
-### TODO:

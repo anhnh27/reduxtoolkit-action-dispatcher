@@ -1,5 +1,5 @@
 import {createDispatcher} from '@anhnh27/reduxtoolkit-action-dispatcher';
-import type {PayloadAction} from '@reduxjs/toolkit';
+import type {AnyAction, PayloadAction} from '@reduxjs/toolkit';
 import {createSlice} from '@reduxjs/toolkit';
 import {all, call, fork, takeLatest} from 'redux-saga/effects';
 
@@ -32,14 +32,13 @@ const fakeApiRequest = () => {
   });
 };
 
-function* counterSagaWorker({$result}: any) {
-  console.log('counterSagaWorker called');
+function* counterSagaWorker({$result}: AnyAction) {
   yield call(fakeApiRequest);
   $result.value = true;
 }
 
 function* counterSaga() {
-  yield takeLatest(counterDispatcher.update.toString(), counterSagaWorker);
+  yield takeLatest(counterDispatcher.update, counterSagaWorker);
 }
 
 export function* rootSaga() {
