@@ -1,9 +1,11 @@
-export const injectResultToAction = (action: any) => {
+import { AnyAction } from "@reduxjs/toolkit";
+
+export const injectResultToAction = (action: AnyAction) => {
   let callback: Function;
 
-  const $result = () => {
-    const promise = new Promise(resolve => (callback = resolve));
-    Object.defineProperty(promise, 'value', {
+  const getResult = () => {
+    const promise = new Promise((resolve) => (callback = resolve));
+    Object.defineProperty(promise, "value", {
       set: setResult,
     });
 
@@ -12,8 +14,8 @@ export const injectResultToAction = (action: any) => {
 
   const setResult = (data: any) => callback(data);
 
-  Object.defineProperty(action, '$result', {
-    get: $result,
+  Object.defineProperty(action, "$result", {
+    get: getResult,
     set: setResult,
   });
 

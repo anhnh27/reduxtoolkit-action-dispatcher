@@ -15,9 +15,13 @@ export const counterSlice = createSlice({
   name: 'counter',
   initialState,
   reducers: {
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    incrementByAmount: (state, {payload}: PayloadAction<number>) => {
+      state.value += payload;
     },
+    testObjectPayload: (
+      state,
+      _action: PayloadAction<{id: string; name: string}>,
+    ) => state,
     update: (state, _action: PayloadAction<string>) => state,
   },
 });

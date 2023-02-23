@@ -2,33 +2,22 @@
  * CreatedBy: Hoang Anh Nguyen
  * Date: 08 Nov 22
  */
-
-import {
-  AnyAction,
-  CaseReducerActions,
-  Slice,
-  SliceCaseReducers,
-} from '@reduxjs/toolkit';
-import {store} from './actionDispatcherMiddleware';
-import {injectResultToAction} from './utils';
-
-type PromiseResult = {
-  $result: any;
-};
-
-type DispatchFunction = (...args: any[]) => AnyAction & PromiseResult;
+import { CaseReducerActions, Slice, SliceCaseReducers } from "@reduxjs/toolkit";
+import { store } from "./actionDispatcherMiddleware";
+import { ActionCreator, DispatchFunction } from "./types";
+import { injectResultToAction } from "./utils";
 
 const createDispatcher = <
-  State,
-  CaseReducers extends SliceCaseReducers<State>,
   Name extends string,
+  ReducerState,
+  CaseReducers extends SliceCaseReducers<ReducerState>
 >(
-  slice: Slice<State, CaseReducers, Name>,
-): {
-  [Type in keyof CaseReducers]: DispatchFunction;
-} => {
+  slice: Slice<ReducerState, CaseReducers, Name>
+) => {
   const dispatcher = {};
+
   const actions: CaseReducerActions<CaseReducers, Name> = slice.actions;
+
   for (const action in actions) {
     if (Object.prototype.hasOwnProperty.call(actions, action)) {
       Object.defineProperty(dispatcher, action, {
@@ -38,13 +27,23 @@ const createDispatcher = <
   }
 
   return dispatcher as {
-    [Type in keyof CaseReducers]: DispatchFunction;
+    [Key in keyof CaseReducerActions<CaseReducers, Name>]: DispatchFunction<
+      Name,
+      CaseReducers[Key]
+    >;
   };
 };
 
-const wrapDispatch = (type: string, creator: any) => {
+const wrapDispatch = <
+  Name extends string,
+  ReducerState,
+  CaseReducers extends SliceCaseReducers<ReducerState>
+>(
+  type: string,
+  creator: ActionCreator<Name, CaseReducers>
+) => {
   const dispatcher = (...args: any[]) => {
-    const originalAction = creator.apply(null, args);
+    const originalAction = (creator as Function).apply(null, args);
     let action = injectResultToAction(originalAction);
     store.dispatch(action);
     return action;
